@@ -25,6 +25,7 @@
 		F340C4EF182DC17E00704230 /* PlayingCard.m in Sources */ = {isa = PBXBuildFile; fileRef = F340C4EE182DC17E00704230 /* PlayingCard.m */; };
 		F340C4F2182DC2E300704230 /* Deck.m in Sources */ = {isa = PBXBuildFile; fileRef = F340C4F1182DC2E300704230 /* Deck.m */; };
 		F340C4F5182DC5BE00704230 /* PlayingCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = F340C4F4182DC5BE00704230 /* PlayingCardDeck.m */; };
+		F3BBDCD9184BB2CE00128E7B /* CardMatchingGame.m in Sources */ = {isa = PBXBuildFile; fileRef = F3BBDCD8184BB2CE00128E7B /* CardMatchingGame.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,8 @@
 		F340C4F1182DC2E300704230 /* Deck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Deck.m; path = Model/Deck.m; sourceTree = "<group>"; };
 		F340C4F3182DC5BE00704230 /* PlayingCardDeck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayingCardDeck.h; path = Model/PlayingCardDeck.h; sourceTree = "<group>"; };
 		F340C4F4182DC5BE00704230 /* PlayingCardDeck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayingCardDeck.m; path = Model/PlayingCardDeck.m; sourceTree = "<group>"; };
+		F3BBDCD7184BB2CE00128E7B /* CardMatchingGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardMatchingGame.h; path = Model/CardMatchingGame.h; sourceTree = "<group>"; };
+		F3BBDCD8184BB2CE00128E7B /* CardMatchingGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CardMatchingGame.m; path = Model/CardMatchingGame.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +131,8 @@
 				F31923DC1829D8EA00F65684 /* CardGameAppDelegate.h */,
 				F31923DD1829D8EA00F65684 /* CardGameAppDelegate.m */,
 				F31923DF1829D8EA00F65684 /* Main.storyboard */,
+				F3BBDCD7184BB2CE00128E7B /* CardMatchingGame.h */,
+				F3BBDCD8184BB2CE00128E7B /* CardMatchingGame.m */,
 				F31923E21829D8EA00F65684 /* CardGameViewController.h */,
 				F31923E31829D8EA00F65684 /* CardGameViewController.m */,
 				F31923E51829D8EA00F65684 /* Images.xcassets */,
@@ -282,6 +287,7 @@
 				F31923E41829D8EA00F65684 /* CardGameViewController.m in Sources */,
 				F31923DA1829D8EA00F65684 /* main.m in Sources */,
 				F340C4EF182DC17E00704230 /* PlayingCard.m in Sources */,
+				F3BBDCD9184BB2CE00128E7B /* CardMatchingGame.m in Sources */,
 				F340C4F5182DC5BE00704230 /* PlayingCardDeck.m in Sources */,
 				F340C4F2182DC2E300704230 /* Deck.m in Sources */,
 				F340C4EB182DBF7600704230 /* Card.m in Sources */,
