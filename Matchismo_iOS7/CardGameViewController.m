@@ -16,16 +16,33 @@
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (strong, nonatomic) CardMatchingGame* game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *cardsToMatch;
 
 @end
 
 @implementation CardGameViewController
 
 -(CardMatchingGame*) game{
-    if(!_game) _game = [[CardMatchingGame alloc]initWithCardCount:self.cardButtons.count usingDeck:[self createDeck]];
+    NSUInteger numberOfCardsToMatch = self.cardsToMatch.selectedSegmentIndex==0?2:3;
+    if(!_game) _game = [[CardMatchingGame alloc]initWithCardCount:self.cardButtons.count usingDeck:[self createDeck] comaring:numberOfCardsToMatch];
+    [self.cardsToMatch setEnabled:FALSE];
     return _game;
 
 }
+- (IBAction)reDeal:(id)sender {
+    self.game = nil;
+    [self updateUI];
+    [self.cardsToMatch setEnabled:TRUE];
+    
+}
+- (IBAction)changeNumberOfCardSelector:(id)sender {
+    self.game = nil;
+    [self updateUI];
+    
+}
+
+
+
 
 -(Deck*) createDeck{
     return [[PlayingCardDeck alloc] init];

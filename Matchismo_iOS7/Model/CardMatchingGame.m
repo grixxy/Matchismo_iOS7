@@ -7,10 +7,12 @@
 //
 
 #import "CardMatchingGame.h"
+#import "PlayingCard.h"
 
 @interface CardMatchingGame()
 @property(nonatomic, readwrite) NSInteger score;
 @property(nonatomic, strong) NSMutableArray* cards;//of Cards
+@property(nonatomic) NSUInteger cardsToMatch;
 @end
 
 @implementation CardMatchingGame
@@ -23,8 +25,9 @@
     return _cards;
 }
 
-- (instancetype) initWithCardCount:(NSUInteger) count usingDeck:(Deck *) deck{
+- (instancetype) initWithCardCount:(NSUInteger) count usingDeck:(Deck *) deck comaring:(NSUInteger)numberOfCards{
     self = [super init];
+    self.cardsToMatch = numberOfCards;
     if(self){
         
         for(int i=0;i<count;i++){
@@ -55,30 +58,84 @@ static const int COST_TO_CHOOSE = 1;
     
     Card* card = [self cardAtIndex:index];
     
-    if(!card.isMatched){
+    if([self cardCanBeFlipped:card]){
         if(card.isChosen){
             card.chosen = NO;
         } else {
-            for(Card* otherCard in self.cards){
-                if(otherCard.isChosen&&!otherCard.isMatched){
-                    int matchScore = [card match:@[otherCard]];
-                    if(matchScore){
-                        self.score +=matchScore * MATCH_BONUS;
-                        otherCard.matched  = YES;
-                        card.matched = YES;
-                    } else {
-                        self.score -=MISMATCH_PENALTY;
-                        otherCard.chosen = NO;
-                    }
-                    break;
-                }
-            }
-            self.score -= COST_TO_CHOOSE;
-            card.chosen = YES;
+            [self flipAndShowCard:card];
         }
     
     }
 
 }
+
+-(bool) cardCanBeFlipped:(Card*) card{
+    return !card.isMatched;
+}
+
+-(void) flipAndShowCard:(Card*)card{
+    card.chosen = YES;
+    self.score -= COST_TO_CHOOSE;
+    if([self timeToCountScore]){
+        [self countScore:card];
+    }
+    
+}
+
+-(bool)timeToCountScore{
+    return [self unmatchedFlippedCards].count==self.cardsToMatch;
+}
+
+-(NSArray*)unmatchedFlippedCards{
+    NSMutableArray* unmatchedFlippedCards = [[NSMutableArray alloc]init];
+    for(Card* card in self.cards){
+        if(card.isChosen&&!card.isMatched){
+            [unmatchedFlippedCards addObject:card];
+        }
+    }
+    return unmatchedFlippedCards;
+}
+
+
+-(void) countScore:(Card*) lastCard {
+    NSArray *unmatchedFlippedCards = [self unmatchedFlippedCards];
+    int matchScore = [self match:unmatchedFlippedCards];
+     if(matchScore){
+         self.score +=matchScore * MATCH_BONUS;
+         for(PlayingCard* card in unmatchedFlippedCards){
+             card.matched = YES;
+         }
+         
+         
+      } else {
+          self.score -=MISMATCH_PENALTY;
+          for(PlayingCard* card in unmatchedFlippedCards){
+              card.chosen = NO;
+          }
+          lastCard.chosen = YES;
+      }
+
+}
+
+
+const int RANK_MATCH_BONUS = 4;
+
+
+-(int) match:(NSArray *)cardsToMatch{
+    int score = 0;
+    NSMutableSet* ranks = [[NSMutableSet alloc] init];
+    NSMutableSet* suits = [[NSMutableSet alloc] init];
+    for(PlayingCard* card in cardsToMatch){
+        [ranks addObject:[NSNumber numberWithInteger:card.rank]];
+        [suits addObject:card.suit];
+    };
+    
+    score = (cardsToMatch.count - ranks.count)*RANK_MATCH_BONUS;
+    score +=(cardsToMatch.count - suits.count);
+    
+    return score;
+    
+}
+
 
 @end
