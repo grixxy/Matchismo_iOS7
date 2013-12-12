@@ -17,6 +17,7 @@
 @property (strong, nonatomic) CardMatchingGame* game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *cardsToMatch;
+@property (weak, nonatomic) IBOutlet UILabel *lastResultLabel;
 
 @end
 
@@ -35,13 +36,6 @@
     [self.cardsToMatch setEnabled:TRUE];
     
 }
-- (IBAction)changeNumberOfCardSelector:(id)sender {
-    self.game = nil;
-    [self updateUI];
-    
-}
-
-
 
 
 -(Deck*) createDeck{
@@ -60,17 +54,45 @@
     for(UIButton* cardButton in self.cardButtons){
         int cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
         Card* card = [self.game cardAtIndex:cardButtonIndex];
-        [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
+        [cardButton setAttributedTitle:[self titleForCard:card] forState:UIControlStateNormal];
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         cardButton.enabled = !card.isMatched;
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    self.lastResultLabel.text = [self lastResultString];
 
 }
 
--(NSString*)titleForCard:(Card*)card{
+-(NSString*) lastResultString{
+    NSString* lastResultString = @"";
+    if(self.game.lastMatchingResult.operands){
+        
+        NSString* cards = [self.game.lastMatchingResult.operands componentsJoinedByString:@" "];
+        if(self.game.lastMatchingResult.score>0){
+            
+            NSString* points = [NSString stringWithFormat:@" for %d points", self.game.lastMatchingResult.score];
+            lastResultString = [[@"Matched " stringByAppendingString:cards] stringByAppendingString:points];
+        } else {
+            
+            NSString* points = [NSString stringWithFormat:@"%d points penalty!", self.game.lastMatchingResult.score];
+            lastResultString = [[cards stringByAppendingString:@" don't match! "] stringByAppendingString:points];
+        }
+    }
+    return lastResultString;
+
+}
+
+-(NSAttributedString*)titleForCard:(Card*)card{
+    NSMutableAttributedString* attrTitle;
+    if(card.isChosen){
+        attrTitle = [[NSMutableAttributedString alloc]initWithString: card.contents];
+        [attrTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0,card.contents.length)];
+        
+    } else {
+        attrTitle = [[NSMutableAttributedString alloc]initWithString: @""];
+    }
     
-    return card.isChosen?card.contents:@"";
+    return attrTitle;
 }
 
 -(UIImage*)backgroundImageForCard:(Card*)card{

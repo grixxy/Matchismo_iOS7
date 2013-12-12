@@ -11,8 +11,10 @@
 
 @interface CardMatchingGame()
 @property(nonatomic, readwrite) NSInteger score;
+@property(nonatomic, readwrite) LastMatchingResult* lastMatchingResult;
 @property(nonatomic, strong) NSMutableArray* cards;//of Cards
 @property(nonatomic) NSUInteger cardsToMatch;
+
 @end
 
 @implementation CardMatchingGame
@@ -24,6 +26,14 @@
     
     return _cards;
 }
+
+-(LastMatchingResult*) lastMatchingResult{
+    if(!_lastMatchingResult){
+        _lastMatchingResult = [[LastMatchingResult alloc] init];
+    }
+    return _lastMatchingResult;
+}
+
 
 - (instancetype) initWithCardCount:(NSUInteger) count usingDeck:(Deck *) deck comaring:(NSUInteger)numberOfCards{
     self = [super init];
@@ -100,23 +110,26 @@ static const int COST_TO_CHOOSE = 1;
 -(void) countScore:(Card*) lastCard {
     NSArray *unmatchedFlippedCards = [self unmatchedFlippedCards];
     int matchScore = [self match:unmatchedFlippedCards];
+    
+    self.lastMatchingResult.operands = unmatchedFlippedCards;
+    
+    
      if(matchScore){
-         self.score +=matchScore * MATCH_BONUS;
+         self.lastMatchingResult.score = matchScore * MATCH_BONUS;
          for(PlayingCard* card in unmatchedFlippedCards){
              card.matched = YES;
          }
-         
-         
       } else {
-          self.score -=MISMATCH_PENALTY;
+          self.lastMatchingResult.score = -MISMATCH_PENALTY;
           for(PlayingCard* card in unmatchedFlippedCards){
               card.chosen = NO;
           }
           lastCard.chosen = YES;
       }
-
+    
+      self.score +=self.lastMatchingResult.score;
+    
 }
-
 
 const int RANK_MATCH_BONUS = 4;
 
